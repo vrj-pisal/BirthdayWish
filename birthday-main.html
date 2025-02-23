@@ -267,12 +267,7 @@
         <p class="romantic-message">Every moment with you is a celebration, but today is especially magical. Here's to another year of love, laughter, and countless beautiful memories together.</p>
         <button class="celebrate-button" id="celebrateBtn">Celebrate your special day!</button>
         <button class="next-page-button" id="nextPageBtn">Cake cutting</button>
-    </div>
-
-    <audio id="birthday-audio">
-        <source src="assets/audio/Good_Morning_to_All(chosic.com).mp3" type="audio/mpeg">
-      </audio>    
-
+    </div>   
     <script>
         // Canvas elements
         const starCanvas = document.getElementById('starCanvas');
@@ -931,31 +926,9 @@
                 });
             }, 3000);
         });
-
-        //NewCodeFor audio
-        document.addEventListener("DOMContentLoaded", function () {
-    const birthdayContainer = document.querySelector(".birthday-container");
-    const audio = document.getElementById("birthday-audio");
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                audio.play(); // Play audio when visible
-                observer.disconnect(); // Stop observing after playing once
-            }
-        });
-    }, { threshold: 0.5 }); // Adjust threshold as needed
-
-    if (birthdayContainer) {
-        observer.observe(birthdayContainer);
-    }
-});
-
     </script>  
-      <!--
       <audio autoplay loop>
         <source src="assets/audio/Good_Morning_to_All(chosic.com).mp3" type="audio/mpeg">
       </audio>
-    -->
 </body>
 </html>
