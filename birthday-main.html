@@ -817,29 +817,35 @@
                 letter.className = 'letter';
                 birthdayText.appendChild(letter);
             }
+         // Select the audio element
+const birthdayAudio = document.getElementById("birthdayAudio");
             
-            // Start text animation after 3 seconds
-            setTimeout(() => {
-                birthdayText.style.opacity = 1;
-                
-                // Animate each letter
-                const letters = document.querySelectorAll('.letter');
-                letters.forEach((letter, index) => {
-                    gsap.to(letter, {
-                        opacity: 1,
-                        y: 0,
-                        delay: 3 + index * 0.1,
-                        duration: 0.6,
-                        ease: "back.out(1.7)"
-                    });
-                });
-                
-                // Animate the whole text with glow
-                gsap.to(birthdayText, {
-                    textShadow: "0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 123, 172, 0.4)",
-                    delay: 3 + text.length * 0.1 + 0.3,
-                    duration: 1.5
-                });
+           // Start text animation after 3 seconds
+setTimeout(() => {
+    birthdayText.style.opacity = 1;
+
+    // Play the audio at the same time the text appears
+    birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
+
+    // Animate each letter
+    const letters = document.querySelectorAll('.letter');
+    letters.forEach((letter, index) => {
+        gsap.to(letter, {
+            opacity: 1,
+            y: 0,
+            delay: 3 + index * 0.1,
+            duration: 0.6,
+            ease: "back.out(1.7)"
+        });
+    });
+
+    // Animate the whole text with glow
+    gsap.to(birthdayText, {
+        textShadow: "0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 123, 172, 0.4)",
+        delay: 3 + text.length * 0.1 + 0.3,
+        duration: 1.5
+    });
+
                 
                 // Animate button appearance
                 const celebrateBtn = document.getElementById('celebrateBtn');
@@ -927,8 +933,8 @@
             }, 3000);
         });
     </script>  
-      <audio autoplay loop>
+     <audio id="birthdayAudio">
         <source src="assets/audio/Good_Morning_to_All(chosic.com).mp3" type="audio/mpeg">
-      </audio>
+    </audio>    
 </body>
 </html>
