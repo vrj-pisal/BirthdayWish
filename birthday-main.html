@@ -857,9 +857,10 @@
                     delay: 3 + text.length * 0.1 + 0.3,
                     duration: 1.5
                 });
-                
-                // Play the audio at the same time the text appears
-                birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
+
+                 setTimeout(() => {
+        birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
+    }, 3000); 
 
 
                 // Animate button appearance
