@@ -842,7 +842,7 @@
                 const letters = document.querySelectorAll('.letter');
                 setTimeout(() => {
                     birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
-                }, 2000);
+                }, 1000);
 
                 letters.forEach((letter, index) => {
                     gsap.to(letter, {
