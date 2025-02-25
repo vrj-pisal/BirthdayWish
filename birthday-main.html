@@ -823,10 +823,6 @@ const birthdayAudio = document.getElementById("birthdayAudio");
            // Start text animation after 3 seconds
 setTimeout(() => {
     birthdayText.style.opacity = 1;
-
-    // Play the audio at the same time the text appears
-    birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
-
     // Animate each letter
     const letters = document.querySelectorAll('.letter');
     letters.forEach((letter, index) => {
@@ -838,6 +834,8 @@ setTimeout(() => {
             ease: "back.out(1.7)"
         });
     });
+     // Play the audio at the same time the text appears
+     birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
 
     // Animate the whole text with glow
     gsap.to(birthdayText, {
