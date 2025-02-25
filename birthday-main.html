@@ -841,8 +841,8 @@
                 // Animate each letter
                 const letters = document.querySelectorAll('.letter');
                 setTimeout(() => {
-        birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
-    }, 3000); 
+                    birthdayAudio.play().catch(error => console.log("Autoplay blocked:", error));
+                }, 2000);
 
                 letters.forEach((letter, index) => {
                     gsap.to(letter, {
@@ -853,7 +853,7 @@
                         ease: "back.out(1.7)"
                     });
                 });
-                
+
 
                 // Animate the whole text with glow
                 gsap.to(birthdayText, {
@@ -861,10 +861,10 @@
                     delay: 3 + text.length * 0.1 + 0.3,
                     duration: 1.5
                 });
-            },3000);
-                // Animate button appearance
-                const celebrateBtn = document.getElementById('celebrateBtn');
-                setTimeout(() => {
+            }, 3000);
+            // Animate button appearance
+            const celebrateBtn = document.getElementById('celebrateBtn');
+            setTimeout(() => {
                 gsap.to(celebrateBtn, {
                     opacity: 1,
                     scale: 1,
