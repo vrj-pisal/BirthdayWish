@@ -13,6 +13,8 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
+            overflow: hidden; /* ✅ Stops unnecessary scrolling */
+    height: 100vh; /* ✅ Prevents extra space below */
         }
 
         @keyframes gradient {
