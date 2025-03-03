@@ -33,10 +33,11 @@
             const secondMessage = document.getElementById('secondMessage');
             const enterButton = document.getElementById('enterButton');
             const gifContainer = document.getElementById('gifContainer');
+
+            // gsap.set([secondMessage], { opacity: 0, y: 0, position: 'fixed' });
             
             // Click handler for container
-            messageContainer.addEventListener('click', () => {
-                // Transition messages with GSAP
+            setTimeout(() => {
                 gsap.to(initialMessage, {
                     opacity: 0,
                     y: -20,
@@ -44,11 +45,12 @@
                     onComplete: () => {
                         initialMessage.classList.add('hidden');
                         secondMessage.classList.remove('hidden');
-                        gsap.fromTo(secondMessage, 
-                            {opacity: 0, y: 20},
-                            {opacity: 1, y: 0, duration: 0.5}
+        
+                        gsap.fromTo(secondMessage,
+                            { opacity: 0, y: 0 },
+                            { opacity: 1, y: 0, duration: 0.5 }
                         );
-                        
+        
                         // Show the enter button
                         gsap.to(enterButton, {
                             opacity: 1,
@@ -56,7 +58,7 @@
                             duration: 0.8,
                             delay: 0.3
                         });
-                        
+        
                         // Show the GIF container
                         gsap.to(gifContainer, {
                             opacity: 1,
@@ -66,10 +68,7 @@
                         });
                     }
                 });
-                
-                // Create hearts animation
-                createHearts();
-            });
+            }, 3000);
             
             // Heartbeat animation for button
             enterButton.addEventListener('mouseenter', () => {
