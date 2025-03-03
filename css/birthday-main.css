@@ -211,6 +211,9 @@
                 padding: 10px 25px;
                 font-size: 14px;
             }
+            .next-page-button{
+                bottom: 5%;
+            }
         }
         .next-page-button {
             position: fixed;
