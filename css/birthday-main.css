@@ -8,7 +8,7 @@
         body, html {
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: hidden!important;
             font-family: 'Poppins', sans-serif;
         }
 
@@ -198,7 +198,7 @@
 
         @media screen and (max-width: 480px) {
             .birthday-text {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .romantic-message {
@@ -214,7 +214,7 @@
            
         }
         .next-page-button {
-            position: fixed;
+            position: absolute;
             bottom: 10px;
             right: 10px;
             /* transform: translateX(-50%,50%) scale(0); */

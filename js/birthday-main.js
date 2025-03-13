@@ -474,40 +474,51 @@ function addFirework() {
 function addFloatingHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
-  heart.style.left = `${Math.random() * 90 + 5}%`;
-  heart.style.top = `${Math.random() * 90 + 5}%`;
-  heart.innerHTML = `
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
-                          fill="rgba(255, ${Math.random() * 100}, ${
-    Math.random() * 100
-  }, ${Math.random() * 0.4 + 0.6})"/>
-                </svg>
-            `;
-  heartsContainer.appendChild(heart);
 
-  // Animate heart
+  // Fix position inside viewport
+  const maxX = window.innerWidth - 90; // Prevents overflow
+  const maxY = window.innerHeight - 100; // Prevents overflow
+  heart.style.position = "fixed"; // Ensures hearts don’t affect page size
+  heart.style.left = `${Math.random() * maxX}px`;
+  heart.style.top = `${Math.random() * maxY}px`;
+
+  heart.innerHTML = `
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                fill="rgba(255, ${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 0.4 + 0.6})"/>
+      </svg>
+  `;
+
+  document.body.appendChild(heart); // Append directly to body for better control
+
+  // Limit number of hearts to prevent overflow
+  if (document.querySelectorAll(".heart").length > 10) {
+      document.querySelector(".heart").remove();
+  }
+
+  // Animate heart without affecting layout
   gsap.to(heart, {
-    opacity: 1,
-    scale: 1,
-    duration: 0.5,
-    ease: "elastic.out(1, 0.3)",
-    onComplete: () => {
-      gsap.to(heart, {
-        y: -100 - Math.random() * 100,
-        x: (Math.random() - 0.5) * 100,
-        opacity: 0,
-        rotation: Math.random() * 60 - 30,
-        scale: 0.5,
-        duration: 4 + Math.random() * 4,
-        ease: "power1.out",
-        onComplete: () => {
-          heart.remove();
-        },
-      });
-    },
+      opacity: 1,
+      scale: 1,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.3)",
+      onComplete: () => {
+          gsap.to(heart, {
+              y: -Math.random() * 50 - 20, // Limits movement to prevent scrollbars
+              x: (Math.random() - 0.5) * 20, // Small controlled side movement
+              opacity: 0,
+              rotation: Math.random() * 10 - 5, // Minimal rotation to avoid shifting
+              scale: 0.5,
+              duration: 3,
+              ease: "power1.out",
+              onComplete: () => {
+                  heart.remove();
+              },
+          });
+      },
   });
 }
+
 
 // Animate stars
 function animateStars() {
