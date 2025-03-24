@@ -471,14 +471,23 @@ function addFirework() {
   }
 }
 
+// Ensure the page never scrolls
+document.documentElement.style.overflow = "hidden";
+document.body.style.overflow = "hidden";
+// document.body.style.height = "100vh";
+// document.documentElement.style.height = "100vh";
+document.documentElement.style.position = "fixed";
+document.body.style.position = "fixed";
+
+// Ensure hearts stay within the viewport
 function addFloatingHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
 
-  // Fix position inside viewport
-  const maxX = window.innerWidth - 90; // Prevents overflow
-  const maxY = window.innerHeight - 100; // Prevents overflow
-  heart.style.position = "fixed"; // Ensures hearts don’t affect page size
+  // Prevent overflow
+  const maxX = window.innerWidth - 50;
+  const maxY = window.innerHeight - 50;
+  heart.style.position = "fixed";
   heart.style.left = `${Math.random() * maxX}px`;
   heart.style.top = `${Math.random() * maxY}px`;
 
@@ -489,14 +498,12 @@ function addFloatingHeart() {
       </svg>
   `;
 
-  document.body.appendChild(heart); // Append directly to body for better control
+  document.body.appendChild(heart);
 
-  // Limit number of hearts to prevent overflow
   if (document.querySelectorAll(".heart").length > 10) {
       document.querySelector(".heart").remove();
   }
 
-  // Animate heart without affecting layout
   gsap.to(heart, {
       opacity: 1,
       scale: 1,
@@ -504,10 +511,10 @@ function addFloatingHeart() {
       ease: "elastic.out(1, 0.3)",
       onComplete: () => {
           gsap.to(heart, {
-              y: -Math.random() * 50 - 20, // Limits movement to prevent scrollbars
-              x: (Math.random() - 0.5) * 20, // Small controlled side movement
+              y: -Math.random() * 50 - 20,
+              x: (Math.random() - 0.5) * 20,
               opacity: 0,
-              rotation: Math.random() * 10 - 5, // Minimal rotation to avoid shifting
+              rotation: Math.random() * 10 - 5,
               scale: 0.5,
               duration: 3,
               ease: "power1.out",
@@ -518,6 +525,39 @@ function addFloatingHeart() {
       },
   });
 }
+
+// Hide overflow on celebration
+celebrateBtn.addEventListener("click", (event) => {
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+  // document.body.style.height = "100vh";
+  // document.documentElement.style.height = "100vh";
+  document.documentElement.style.position = "fixed";
+  document.body.style.position = "fixed";
+  
+  gsap.to(celebrateBtn, {
+      scale: 0.95,
+      duration: 0.1,
+      onComplete: () => {
+          startFireworks();
+          showFloatingText();
+          addConfetti();
+          miniFireworks(event.clientX, event.clientY);
+          gsap.to(celebrateBtn, {
+              scale: 1,
+              duration: 0.5,
+              ease: "elastic.out(1, 0.3)",
+          });
+          gsap.to(celebrateBtn, {
+              x: "-5px", 
+              duration: 0.05, 
+              repeat: 5, 
+              yoyo: true, 
+              ease: "power1.inOut"
+          });
+      },
+  });
+});
 
 
 // Animate stars

@@ -49,38 +49,38 @@
             z-index: 1;
             pointer-events: none;
         }
+        .birthday-text,
+.romantic-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    /* max-width: 600px; */
+    opacity: 0;
+}
 
-        .birthday-text {
-            font-family: 'Dancing Script', cursive;
-            color: white;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            white-space: nowrap;
-            font-size: 100px;
-        }
+.birthday-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 100px;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    
+}
 
-        .romantic-message {
-            font-family: 'Poppins', sans-serif;
-            color: rgba(255, 255, 255, 0.9);
-            text-align: center;
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            font-weight: 300;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
-            width: 80%;
-            max-width: 600px;
-        }
+.romantic-message {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+    width: 80%;
+    max-width: 600px;
+}
 
         .hearts-container {
             position: absolute;
@@ -177,42 +177,34 @@
             animation: pulse 2s infinite ease-in-out;
         }
 
-        @media screen and (max-width: 768px) {
-            .birthday-text {
-                font-size: 3.5rem;
-                width: 100%;
-                padding: 0 20px;
-            }
-            
-            .romantic-message {
-                font-size: 1rem;
-                top: 65%;
-            }
-            
-            .celebrate-button {
-                bottom: 15%;
-                padding: 12px 30px;
-                font-size: 16px;
-            }
-        }
+        /* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .birthday-text {
+        font-size: 3.5rem;
+    }
+    .romantic-message {
+        font-size: 1.2rem;
+    }
+    .celebrate-button {
+        font-size: 1rem;
+        padding: 12px 15px;
+        width: 85%; /* Slightly larger on smaller screens */
+    }
+}
 
-        @media screen and (max-width: 480px) {
-            .birthday-text {
-                font-size: 2rem;
-            }
-            
-            .romantic-message {
-                font-size: 0.9rem;
-                width: 90%;
-            }
-            
-            .celebrate-button {
-                bottom: 10%;
-                padding: 10px 25px;
-                font-size: 14px;
-            }
-           
-        }
+@media screen and (max-width: 480px) {
+    .birthday-text {
+        font-size: 2rem;
+    }
+    .romantic-message {
+        font-size: 1rem;
+    }
+      .celebrate-button {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+        width: 90%;
+    }
+}
         .next-page-button {
             position: absolute;
             bottom: 10px;
