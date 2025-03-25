@@ -1,38 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Let's Celebrate with Cake!</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-   <link rel="stylesheet" href="css/cake.css">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/cake.css">
+    <link rel="stylesheet" type="text/css" href="css/loading.css">
+    <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet" type="text/css">
+  
 </head>
+
 <body>
-    <h1 class="heading">Let's Cut the Cake! 🎂</h1>
-    <div class="cake-container">
-        <div class="cake">
-            <div class="layer layer-1">
-                <div class="frosting"></div>
-                <div class="frosting" style="left: 40px"></div>
-                <div class="frosting" style="right: 40px"></div>
+    <div class="loading"></div>
+    <audio class="song" controls loop>
+        <source src="assets/audio/hbd.mp3">
+        Your browser isn't invited for super fun audio time.
+    </audio>
+
+    <img src="assets/images/Balloon-Border.png" class="full-width balloon-border">
+
+    <div class="container">
+        <!-- Bulbs -->
+        <div class="row full-width">
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_yellow"></div></div>
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_red"></div></div>
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_blue"></div></div>
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_green"></div></div>
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_pink"></div></div>
+            <div class="col-md-2 col-xs-2 bulb-holder"><div class="bulb" id="bulb_orange"></div></div>
+        </div>
+
+        <div class="row full-width">
+            <div class="col-xs-12 text-center">
+                <img src="assets/images/banner.png" class="full-width banner">
             </div>
-            <div class="layer layer-2">
-                <div class="frosting"></div>
-                <div class="frosting" style="left: 35px"></div>
-                <div class="frosting" style="right: 35px"></div>
+        </div>
+
+            <!-- Balloons -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <div class="balloons-container">
+                        <div class="balloons text-center" id="b1"><h2 style="color:#F2B300;">R</h2></div>
+                        <div class="balloons text-center" id="b2"><h2 style="color:#0719D4;">U</h2></div>
+                        <div class="balloons text-center" id="b3"><h2 style="color:#D14D39;">T</h2></div>
+                        <div class="balloons text-center" id="b4"><h2 style="color:#8FAD00;">U</h2></div>
+                        <div class="balloons text-center" id="b5"><h2 style="color:#8377E4;">J</h2></div>
+                        <div class="balloons text-center" id="b6"><h2 style="color:#20CFB4;">A</h2></div>
+                    </div>
+                </div>
             </div>
-            <div class="layer layer-3">
-                <div class="frosting"></div>
-                <div class="frosting" style="left: 30px"></div>
-                <div class="frosting" style="right: 30px"></div>
-                <div class="candle">
-                    <div class="flame"></div>
+    </div>
+
+    <!-- Cake Section -->
+    <div class="container-fluid full-width">
+        <div class="cake-wrapper">
+            <div class="cake-container">
+                <div class="cake">
+                    <div class="plate"></div>
+                    <div class="layer layer-bottom"></div>
+                    <div class="layer layer-middle"></div>
+                    <div class="layer layer-top"></div>
+                    <div class="icing"></div>
+                    
+                    <div class="candle">
+                        <div class="blinking-blow"></div>
+                        <div class="thread"></div>
+                        <div class="glow"></div>
+                        <div class="flame"></div>
+                        <div class="smoke"></div>
+                    </div>
+                      <!-- Cake Crumbs -->
+    <div class="cake-crumbs">
+        <img src="assets/images/cakeCrumbs.svg" class="crumbs">
+    </div>
+                </div>
+            </div>
+
+            <div class="knife-container">
+                <img src="assets/images/Knife.svg" class="knife">
+            </div>
+
+            <div class="slice-container">
+                <div class="slice-plate">
+                    <img src="assets/images/scattered-cakeCrumbs-with-cakeSlice.svg" class="cake-slice">
                 </div>
             </div>
         </div>
     </div>
-    <button class="next-page-button">Next Page</button>
 
- <script src="js/cake.js"></script>
+    <!-- Control Buttons -->
+    <div class="navbar navbar-fixed-bottom full-width">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <div class="button-container">
+                <button class="btn btn-primary" id="turn_on">Turn On Lights</button>
+                <button class="btn btn-primary" id="play">Play Music</button>
+                <button class="btn btn-primary" id="banner_coming">Let's Decorate</button>
+                <button class="btn btn-primary" id="balloons_flying">Fly With Balloons</button>
+                <button class="btn btn-primary" id="cake_fadein">Most Delicious Cake Ever</button>
+                <button class="btn btn-primary" id="light_candle">Light Candle</button>
+                <button class="btn btn-primary" id="blow_candle">Blow Candle</button>
+                <button class="btn btn-primary" id="cut_cake">Cut Cake</button>
+                <button class="btn btn-primary" id="unwrap_surprise">Unwrap the Surprise</button>
+                <!-- <button class="btn btn-primary" id="story">A Message for You</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="js/cake.js"></script>
 </body>
+
 </html>
