@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Happy Birthday</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/cake.css">
     <link rel="stylesheet" type="text/css" href="css/loading.css">
+    <link rel="stylesheet" type="text/css" href="css/layout-fix.css">
     <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet" type="text/css">
   
 </head>
@@ -92,27 +93,57 @@
 
     <!-- Control Buttons -->
     <div class="navbar navbar-fixed-bottom full-width">
-        <div class="row">
-            <div class="col-xs-12 text-center">
+      
                 <div class="button-container">
                 <button class="btn btn-primary" id="turn_on">Turn On Lights</button>
-                <button class="btn btn-primary" id="play">Play Music</button>
-                <button class="btn btn-primary" id="banner_coming">Let's Decorate</button>
-                <button class="btn btn-primary" id="balloons_flying">Fly With Balloons</button>
-                <button class="btn btn-primary" id="cake_fadein">Most Delicious Cake Ever</button>
-                <button class="btn btn-primary" id="light_candle">Light Candle</button>
-                <button class="btn btn-primary" id="blow_candle">Blow Candle</button>
-                <button class="btn btn-primary" id="cut_cake">Cut Cake</button>
-                <button class="btn btn-primary" id="unwrap_surprise">Unwrap the Surprise</button>
+                <button class="btn btn-primary" id="play">Let the Music Play</button>
+                <button class="btn btn-primary" id="banner_coming">Time to Decorate</button>
+                <button class="btn btn-primary" id="balloons_flying">Fly Balloons, Fly</button>
+                <button class="btn btn-primary" id="cake_fadein">Reveal the Cake</button>
+                <button class="btn btn-primary" id="light_candle">Light Up the Candle</button>
+                <button class="btn btn-primary" id="blow_candle">Blow Out the Candle</button>
+                <button class="btn btn-primary" id="cut_cake">Slice the Cake</button>
+                <button class="btn btn-primary" id="unwrap_surprise">Unwrap Your Surprise</button>
                 <!-- <button class="btn btn-primary" id="story">A Message for You</button> -->
                 </div>
-            </div>
-        </div>
+        
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="js/cake.js"></script>
+    
+    <!-- Wish Popups -->
+    <div class="wish-popup" id="popup-forgot-wish">
+        <div class="wish-popup-content">
+            <h3>Wait wait...</h3>
+            <p>You forgot to make a wish! 🌠</p>
+            <button id="next-popup-btn">Continue</button>
+        </div>
+    </div>
+
+    <div class="wish-popup" id="popup-make-wish">
+        <div class="wish-popup-content">
+            
+            <p>Close your eyes and make a wish...</p>
+            <div class="making-wish">
+                <div class="wish-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <button id="wish-done-btn">Done</button>
+        </div>
+    </div>
+
+    <div class="wish-popup" id="popup-wish-journey">
+        <div class="wish-popup-content">
+     
+            <p>"A whisper to the stars, a promise to the universe... Your wish is now on its journey."</p>
+            <button id="complete-wish-btn">Continue</button>
+        </div>
+    </div>
 </body>
 
 </html>

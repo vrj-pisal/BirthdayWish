@@ -1,0 +1,397 @@
+/* Height Distribution Fix */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Hide h2 elements in balloons initially */
+.balloons h2 {
+    display: none; /* Hide balloon letters initially */
+}
+
+/* Only show the h2 elements in balloons when blow_candle is clicked and new IDs are assigned */
+#b11 div, #b22 div, #b33 div, #b44 div, #b55 div, #b66 div {
+    display: block; /* Show the text inside the balloon divs */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between !important;
+}
+
+/* Make container take 30% height */
+.container {
+    height: 30% !important;
+    min-height: 30% !important;
+    max-height: 30% !important;
+    /* overflow: auto; */
+    position: relative;
+}
+
+/* Make container-fluid take 60% height */
+.container-fluid.full-width {
+    height: 60% !important;
+    min-height: 60% !important;
+    max-height: 60% !important;
+    overflow: visible;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Position content at the bottom */
+    padding-bottom: 0;
+}
+
+/* Make navbar take 10% height */
+.navbar-fixed-bottom {
+    /* height: 10% !important;
+    min-height: 10% !important;
+    max-height: 10% !important;
+    position: relative !important; */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    /* background-color: rgba(0, 0, 0, 0.7); */
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure cake-wrapper stays within container-fluid and positions at the bottom */
+.cake-wrapper {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.6s ease-in-out; /* Add smooth transition */
+}
+
+/* Add class to trigger scale-down when cake is cut */
+.cake-wrapper.cake-cut {
+    transform: scale(1); /* Default scale */
+}
+
+/* Different scaling for different screen sizes */
+
+@media (max-width: 600px) {
+    .cake-wrapper.cake-cut {
+        transform: scale(0.8); /* Large mobile */
+    }
+}
+
+@media (max-width: 425px) {
+    .cake-wrapper.cake-cut {
+        transform: scale(0.7); /* Standard mobile */
+    }
+}
+
+@media (max-width: 375px) {
+    .cake-wrapper.cake-cut {
+        transform: scale(0.55); /* iPhone/small mobile */
+    }
+}
+
+@media (max-width: 320px) {
+    .cake-wrapper.cake-cut {
+        transform: scale(0.5); /* Very small mobile */
+    }
+}
+
+/* Position the cake at the bottom */
+.cake-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transition: transform 0.6s ease-in-out; /* Smooth transition */
+}
+
+/* Ensure the cake itself is properly positioned */
+.cake {
+    position: relative;
+    bottom: 0;
+    display: none;
+    margin-bottom: 0;
+}
+
+.plate {
+    bottom: 0;
+}
+
+/* Make sure cake is visible on page load */
+/* body:not(.loading) .cake-wrapper .cake {
+    display: block !important;
+} */
+
+/* Remove any margin between container-fluid and navbar */
+.container-fluid.full-width + .navbar-fixed-bottom {
+    margin-top: 0;
+}
+
+/* Make button container fit within navbar */
+.button-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+}
+
+/* Responsive adjustments */
+/* @media (max-width: 768px) {
+    .button-container .btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .button-container .btn {
+        padding: 3px 5px;
+        font-size: 10px;
+    }
+}  */
+
+/* Adjustments for slice position when cake is cut */
+/* .cake-wrapper.cake-cut .slice-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    left: auto;
+    z-index: 10;
+} */
+
+/* Center everything when scaled */
+/* .cake-wrapper.cake-cut {
+    transform: scale(0.8);
+    transform-origin: center center;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+/* Make both cake and slice scale properly */
+/* .cake-wrapper.cake-cut .cake-container,
+.cake-wrapper.cake-cut .slice-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+/* Adjustments for very small screens - mobile friendly layout 
+@media (max-width: 576px) {
+    /* .cake-wrapper.cake-cut {
+        transform: scale(0.5);
+        flex-direction: column;
+    } 
+    
+    .cake-wrapper.cake-cut .cake-container {
+        position: relative;
+        left: 0 !important; /* Override any JS animations 
+        margin-bottom: 20px;
+    }
+    
+    .cake-wrapper.cake-cut .slice-container {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+    }
+}*/
+
+/* Apply initial zoom-out only for small resolutions */
+@media (max-width: 600px) {
+    .cake-container {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 425px) {
+    .cake-container {
+        transform: scale(0.7);
+    }
+}
+
+/* Reset cake-container scale when cake-wrapper is scaled (cake is cut) */
+.cake-wrapper.cake-cut .cake-container {
+    transform: scale(1) !important; /* Reset to normal scale with higher priority */
+}
+
+/* Position the knife container relative to cake */
+.knife-container {
+    position: absolute;
+    z-index: 100;
+    transition: transform 0.6s ease-in-out, top 0.6s ease-in-out, left 0.6s ease-in-out;
+}
+
+/* Default knife positioning */
+/* .knife-container {
+    top: 45%;
+    left: 50%;
+} */
+
+/* Adjust knife position based on screen size for zoomed-out cake */
+@media (max-width: 768px) {
+    .knife-container {
+        top: 40%;
+        /* left: 48%; */
+    }
+}
+
+@media (max-width: 600px) {
+    .knife-container {
+        top: 35%;
+        /* left: 45%; */
+    }
+}
+
+@media (max-width: 425px) {
+    .knife-container {
+        top: 30%;
+        /* left: 42%; */
+    }
+}
+
+@media (max-width: 375px) {
+    .knife-container {
+        top: 28%;
+        /* left: 40%; */
+    }
+}
+
+@media (max-width: 320px) {
+    .knife-container {
+        top: 25%;
+        /* left: 38%; */
+    }
+}
+
+/* Adjust knife position when cake is cut */
+
+/* Popup styling */
+.wish-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.wish-popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Override default display:none from jQuery's fadeOut to allow for smooth CSS transitions */
+.wish-popup:not(.active) {
+    display: flex !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.wish-popup-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: popup-scale 0.4s ease-out;
+    position: relative;
+}
+
+@keyframes popup-scale {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.wish-popup h3 {
+    margin-top: 0;
+    color: #ff6b6b;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.wish-popup p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.wish-popup button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.wish-popup button:hover {
+    background-color: #ff5252;
+}
+
+/* Make wish animation */
+.making-wish {
+    display: none;
+    margin: 15px 0;
+}
+
+.making-wish .wish-dots {
+    display: inline-block;
+}
+
+.making-wish .wish-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    margin: 0 3px;
+    animation: wish-dot 1.5s infinite;
+}
+
+.making-wish .wish-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.making-wish .wish-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes wish-dot {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-8px); }
+}
+
+/* Wish message style */
+.wish-message {
+    font-style: italic;
+    color: #4a4a4a;
+    font-size: 18px;
+    text-align: center;
+}

@@ -13,7 +13,7 @@ body {
 }
 
 /* Ensure full-width for containers */
-.container, .container-fluid, .row {
+.container, .container-fluid {
     width: 100%;
     margin: 0;
     padding: 0;
@@ -112,6 +112,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+	padding-bottom: 20px;
 }
 
 .slice-container.active {
@@ -160,7 +161,7 @@ body {
 /* Knife Animation */
 .knife-container {
     position: absolute;
-    top: 55%;
+    top: 15%;
     left: 55%;
     transform-origin: center;
     transform: rotate(30deg);
@@ -1797,242 +1798,147 @@ audio {
 	}
 }
 
-.balloons-container{
-	margin-left: 20px; /* Adjust as needed */
-}
-.balloons {
-	position: fixed;
-	bottom: -200px;
-	opacity: 0.6;
-	z-index: 99;
-	width: 100px;
-	height: 183px;
-	background-repeat: no-repeat no-repeat;
-	background-size: 100px 183px;
-	margin-top: 30px;
+.balloons-container {
+	margin-left: 0;
+	opacity: 1;
+	width: 100%;
+	position: relative;
+	z-index: 100;
+	}
+	.balloons {
+		position: fixed;
+		bottom: -200px;
+		opacity: 1;
+		z-index: 99;
+		width: 90px;
+		height: 164px;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		margin-top: 30px;
+		transition: top 1s ease-out, left 1s ease-out, opacity 0.5s ease-in;
+		}
+		.balloons div {
+			font-family: 'Signika', sans-serif;
+			font-size: 46px;
+			font-weight: bold;
+			position: relative;
+			top: 40%;
+			transform: translateY(-50%);
+			text-align: center;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+			animation: letterBounce 2s ease-in-out infinite, letterGlow 3s ease-in-out infinite;
+			}		
+
+/* Balloon colors and text colors */
+#b1 div, #b11 div { color: #FF9999; } /* Pink balloon - pink text */
+#b2 div, #b22 div { color: #66CCFF; } /* Blue balloon - blue text */
+#b3 div, #b33 div { color: #99FF99; } /* Green balloon - green text */
+#b4 div, #b44 div { color: #FF99CC; } /* Pink balloon - pink text */
+#b5 div, #b55 div { color: #CC99FF; } /* Purple balloon - purple text */
+#b6 div, #b66 div { color: #FFFF99; } /* Yellow balloon - yellow text */
+
+/* Individual balloon images */
+#b1, #b11 {
+background-image: url('../assets/images/b1.png');
 }
 
-.balloons h2 {
-	text-transform: uppercase;
-	font-family: 'Signika', sans-serif;
-	font-size: 50px;
-	color: #BF4136;
-	text-shadow: 5px 5px 5px #FFF;
-	display: none;
+#b2, #b22 {
+background-image: url('../assets/images/b2.png');
 }
 
-#b1,
-#b11 {
-	background-image: url('../assets/images/b1.png');
+#b3, #b33 {
+background-image: url('../assets/images/b3.png');
 }
 
-#b2,
-#b22 {
-	background-image: url('../assets/images/b2.png');
+#b4, #b44 {
+background-image: url('../assets/images/b4.png');
 }
 
-#b3,
-#b33 {
-	background-image: url('../assets/images/b3.png');
+#b5, #b55 {
+background-image: url('../assets/images/b5.png');
 }
 
-#b4,
-#b44 {
-	background-image: url('../assets/images/b4.png');
+#b6, #b66 {
+background-image: url('../assets/images/b6.png');
 }
 
-#b5,
-#b55 {
-	background-image: url('../assets/images/b5.png');
-}
-
-#b6,
-#b66 {
-	background-image: url('../assets/images/b6.png');
-}
-
-#b7,
-#b77 {
-	background-image: url('../assets/images/b7.png');
-}
-
+/* Balloon animation styles */
 .balloons-rotate-behaviour-one {
-	-webkit-animation: balloons_rotate_one linear 10s infinite;
-	-webkit-transform: rotate(30deg);
-	-moz-animation: balloons_rotate_one linear 10s infinite;
-	-moz-transform: rotate(30deg);
-	-o-animation: balloons_rotate_one linear 10s infinite;
-	-o-transform: rotate(30deg);
-	-ms-animation: balloons_rotate_one linear 10s infinite;
-	-ms-transform: rotate(30deg);
-	animation: balloons_rotate_one linear 10s infinite;
-	transform: rotate(30deg);
-}
-
-@-webkit-keyframes balloons_rotate_one {
-	0% {
-		-webkit-transform: rotate(30deg);
-	}
-
-	50% {
-		-webkit-transform: rotate(-30deg);
-	}
-
-	100% {
-		-webkit-transform: rotate(30deg);
-	}
-}
-
-@-moz-keyframes balloons_rotate_one {
-	0% {
-		-moz-transform: rotate(30deg);
-	}
-
-	50% {
-		-moz-transform: rotate(-30deg);
-	}
-
-	100% {
-		-moz-transform: rotate(30deg);
-	}
-}
-
-@-o-keyframes balloons_rotate_one {
-	0% {
-		-o-transform: rotate(30deg);
-	}
-
-	50% {
-		-o-transform: rotate(-30deg);
-	}
-
-	100% {
-		-o-transform: rotate(30deg);
-	}
-}
-
-@-ms-keyframes balloons_rotate_one {
-	0% {
-		-ms-transform: rotate(30deg);
-	}
-
-	50% {
-		-ms-transform: rotate(-30deg);
-	}
-
-	100% {
-		-ms-transform: rotate(30deg);
-	}
+-webkit-animation: balloons_rotate_one linear 10s infinite;
+-webkit-transform: rotate(30deg);
+-moz-animation: balloons_rotate_one linear 10s infinite;
+-moz-transform: rotate(30deg);
+-o-animation: balloons_rotate_one linear 10s infinite;
+-o-transform: rotate(30deg);
+-ms-animation: balloons_rotate_one linear 10s infinite;
+-ms-transform: rotate(30deg);
+animation: balloons_rotate_one linear 10s infinite;
+transform: rotate(30deg);
 }
 
 @keyframes balloons_rotate_one {
-	0% {
-		transform: rotate(30deg);
-	}
-
-	50% {
-		transform: rotate(-30deg);
-	}
-
-	100% {
-		transform: rotate(30deg);
-	}
+0% {
+  transform: rotate(30deg);
+}
+50% {
+  transform: rotate(-30deg);
+}
+100% {
+  transform: rotate(30deg);
+}
 }
 
 .balloons-rotate-behaviour-two {
-	-webkit-animation: balloons_rotate_two linear 10s infinite;
-	-webkit-transform: rotate(-20deg);
-	-moz-animation: balloons_rotate_two linear 10s infinite;
-	-moz-transform: rotate(-20deg);
-	-o-animation: balloons_rotate_two linear 10s infinite;
-	-o-transform: rotate(-20deg);
-	-ms-animation: balloons_rotate_two linear 10s infinite;
-	-ms-transform: rotate(-20deg);
-	animation: balloons_rotate_two linear 10s infinite;
-	transform: rotate(-20deg);
-}
-
-@-webkit-keyframes balloons_rotate_two {
-	0% {
-		-webkit-transform: rotate(-20deg);
-	}
-
-	50% {
-		-webkit-transform: rotate(20deg);
-	}
-
-	100% {
-		-webkit-transform: rotate(-20deg);
-	}
-}
-
-@-moz-keyframes balloons_rotate_two {
-	0% {
-		-moz-transform: rotate(-20deg);
-	}
-
-	50% {
-		-moz-transform: rotate(20deg);
-	}
-
-	100% {
-		-moz-transform: rotate(-20deg);
-	}
-}
-
-@-o-keyframes balloons_rotate_two {
-	0% {
-		-o-transform: rotate(-20deg);
-	}
-
-	50% {
-		-o-transform: rotate(20deg);
-	}
-
-	100% {
-		-o-transform: rotate(-20deg);
-	}
-}
-
-@-ms-keyframes balloons_rotate_two {
-	0% {
-		-ms-transform: rotate(-20deg);
-	}
-
-	50% {
-		-ms-transform: rotate(20deg);
-	}
-
-	100% {
-		-ms-transform: rotate(-20deg);
-	}
+-webkit-animation: balloons_rotate_two linear 10s infinite;
+-webkit-transform: rotate(-20deg);
+-moz-animation: balloons_rotate_two linear 10s infinite;
+-moz-transform: rotate(-20deg);
+-o-animation: balloons_rotate_two linear 10s infinite;
+-o-transform: rotate(-20deg);
+-ms-animation: balloons_rotate_two linear 10s infinite;
+-ms-transform: rotate(-20deg);
+animation: balloons_rotate_two linear 10s infinite;
+transform: rotate(-20deg);
 }
 
 @keyframes balloons_rotate_two {
-	0% {
-		transform: rotate(-20deg);
-	}
-
-	50% {
-		transform: rotate(20deg);
-	}
-
-	100% {
-		transform: rotate(-20deg);
-	}
+0% {
+  transform: rotate(-20deg);
+}
+50% {
+  transform: rotate(20deg);
+}
+100% {
+  transform: rotate(-20deg);
+}
 }
 
 .balloon-border {
-	position: fixed;
-	top: 100%;
-	opacity: 0.5;
-	z-index: 9999;
+position: fixed;
+top: 100%;
+left: 50%;
+transform: translate(-50%);
+opacity: 0;
+z-index: 9999;
+width: auto !important;
+/* height: 100vh !important; */
+max-width: none !important;
+object-fit: contain !important;
+display: none;
+transition: opacity 0.5s ease-in-out;
 }
 
+.balloon-border.visible {
+display: block;
+opacity: 0.7;
+}
+
+/* Control elements */
 .control-panel {
-	position: fixed;
-	bottom: 0;
-	padding: 10px 0px 10px 0px;
+position: fixed;
+bottom: 0;
+padding: 10px 0px 10px 0px;
 }
 
 #play,
@@ -2107,3 +2013,41 @@ audio {
     align-items: center;
     width: 100%;
 }
+/* More dynamic letter animations for balloons */
+@keyframes letterBounce {
+	0%, 20%, 100% { transform: translateY(-50%) scale(1); }
+	50% { transform: translateY(-55%) scale(1.2); }
+	70% { transform: translateY(-47%) scale(0.95); }
+  }
+  
+  @keyframes letterGlow {
+	0%, 100% { text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9); }
+	50% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px currentColor, 0 0 15px currentColor; }
+  }
+  
+  @keyframes letterRotate {
+	0%, 100% { transform: translateY(-50%) rotate(0deg); }
+	25% { transform: translateY(-50%) rotate(-5deg); }
+	75% { transform: translateY(-50%) rotate(5deg); }
+  }
+  
+  /* Apply different animations to each balloon letter */
+  #b11 div { animation: letterBounce 2s ease-in-out infinite, letterGlow 3s ease-in-out infinite; }
+  #b22 div { animation: letterRotate 2.5s ease-in-out infinite, letterGlow 3.5s ease-in-out infinite; }
+  #b33 div { animation: letterBounce 1.8s ease-in-out infinite, letterGlow 2.8s ease-in-out infinite; }
+  #b44 div { animation: letterRotate 2.2s ease-in-out infinite, letterGlow 3.2s ease-in-out infinite; }
+  #b55 div { animation: letterBounce 2.1s ease-in-out infinite, letterGlow 3.1s ease-in-out infinite; }
+  #b66 div { animation: letterRotate 1.9s ease-in-out infinite, letterGlow 2.9s ease-in-out infinite; }
+  
+  .balloons div {
+	font-family: 'Signika', sans-serif;
+	font-size: 46px;
+	font-weight: bold;
+	position: relative;
+	top: 40%;
+	transform: translateY(-50%);
+	text-align: center;
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+  }
+  
+  
