@@ -1,4 +1,6 @@
 let isOpening = false;
+let animationComplete = false;
+let shootingStarCreated = false;
 
 document.addEventListener("DOMContentLoaded", function () {
     const box = document.querySelector(".box-body");
@@ -20,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
             gift.style.display = "none";
             gift.style.visibility = "hidden";
         });
+        currentGiftIndex = 0;
+        animationComplete = false;
     }
 
     function positionGift(gift) {
@@ -30,84 +34,386 @@ document.addEventListener("DOMContentLoaded", function () {
         const middleX = (boxRect.left + boxRect.right) / 2;
 
         gift.style.position = "absolute";
-        // gift.style.left = `${middleX}%`;
-        // gift.style.top = `${middleY}%`;
-        // gift.style.transform = "translate(0%, -100%)"; // Center it properly
         gift.style.display = "block";
     }
 
+    function createStarryBackground() {
+        const starsContainer = document.querySelector('.stars-container');
+        const stars = [];
+        
+        // Create stars
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Random position
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            
+            // Random size (1-3px)
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Random twinkle delay
+            star.style.animationDelay = `${Math.random() * 4}s`;
+            
+            starsContainer.appendChild(star);
+            stars.push(star);
+        }
+        
+        return stars;
+    }
+
+    function createFinalMessage() {
+        const finalMessage = document.createElement('div');
+        finalMessage.className = 'final-message';
+        
+        // Different content for different screen sizes
+        let lines;
+        
+        if (window.innerWidth <= 480) {
+            // Mobile version - shorter lines
+            lines = [
+                'And as this celebration fades into the night,',
+                'know that somewhere, someone is',
+                'silently wishing you all the happiness',
+                'in the world.',
+                'Happy birthday once again.',
+                '',
+                'Remember—<span class="highlight">every star has a story.</span>',
+                '<span class="highlight">This one is yours.</span>'
+            ];
+        } else {
+            // Desktop version
+            lines = [
+                'And as this celebration fades into the night,',
+                'know that somewhere, someone is silently wishing you',
+                'all the happiness in the world.',
+                'Happy birthday once again.',
+                '',
+                'Remember—<span class="highlight">every star has a story.</span>',
+                '<span class="highlight">This one is yours.</span>'
+            ];
+        }
+        
+        lines.forEach(line => {
+            const lineDiv = document.createElement('div');
+            lineDiv.className = 'line';
+            lineDiv.innerHTML = line;
+            finalMessage.appendChild(lineDiv);
+        });
+        
+        document.querySelector('.container').appendChild(finalMessage);
+        
+        // Add resize handler to adjust content if window size changes
+        const resizeHandler = () => {
+            const existingMessage = document.querySelector('.final-message');
+            if (existingMessage) {
+                document.querySelector('.container').removeChild(existingMessage);
+                createFinalMessage();
+            }
+        };
+        
+        // Debounce the resize handler for better performance
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeHandler, 250);
+        });
+        
+        return finalMessage;
+    }
+
+    function animateLines(finalMessage) {
+        const lines = finalMessage.querySelectorAll('.line');
+        
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                line.classList.add('show');
+            }, index * 800); // Show each line with a delay
+        });
+    }
+
+    function fadeOutElements() {
+        // First sequence: message, gifts, and box
+        const firstSequence = [
+            { element: document.querySelector('.message'), delay: 1000 },
+            { element: document.querySelectorAll('.img')[2], delay: 2000 }, // Last gift
+            { element: document.querySelectorAll('.img')[1], delay: 2500 }, // Second gift
+            { element: document.querySelectorAll('.img')[0], delay: 3000 }, // First gift
+            { element: document.querySelector('.box'), delay: 4000 }
+        ];
+
+        // Apply first sequence
+        firstSequence.forEach(({element, delay}) => {
+            if (element) {
+                setTimeout(() => {
+                    if (!isOpening || !animationComplete) return;
+                    element.classList.add('fade-out');
+                }, delay);
+            }
+        });
+        
+        // Then after a pause, fade out the confetti background
+        setTimeout(() => {
+            if (!isOpening || !animationComplete) return;
+            
+            const confetti = document.querySelector('#confetti');
+            if (confetti) {
+                confetti.classList.add('fade-out');
+            }
+
+            // Start the night sky transition
+            startNightSkyTransition();
+        }, 5000); // Start night sky after elements fade out
+    }
+
+    function createShootingStar() {
+        // Remove any existing shooting stars first
+        const existingStars = document.querySelectorAll('.shooting-star');
+        existingStars.forEach(star => star.remove());
+        
+        const star = document.createElement("span");
+        star.classList.add("shooting-star");
+
+        // Position near the moon (top right corner)
+        const moon = document.querySelector('.moon');
+        let startX, startY;
+        
+        if (moon) {
+            const moonRect = moon.getBoundingClientRect();
+            // Position slightly to the left and below the moon
+            startX = moonRect.left - 10;
+            startY = moonRect.bottom + 20; // Position below the moon
+        } else {
+            // Fallback if moon element not found
+            startX = window.innerWidth * 0.8; // 80% from left
+            startY = window.innerHeight * 0.2; // 20% from top
+        }
+
+        star.style.top = startY + "px";
+        star.style.left = startX + "px";
+        
+        // Add to the container instead of document.body to prevent scrollbars
+        const container = document.querySelector('.container');
+        container.appendChild(star);
+
+        // Move diagonally
+        star.style.setProperty('--endX', startX - 300 + "px");
+        star.style.setProperty('--endY', startY + 300 + "px");
+
+        setTimeout(() => {
+            star.remove();
+        }, 3000);
+    }
+
+    function startNightSkyTransition() {
+        // Create starry background
+        const container = document.querySelector('.container');
+        
+        // Create and append starry background if it doesn't exist
+        let starryBackground = document.querySelector('.starry-background');
+        if (!starryBackground) {
+            starryBackground = document.createElement('div');
+            starryBackground.className = 'starry-background';
+            container.appendChild(starryBackground);
+        }
+
+        // Create and append moon if it doesn't exist
+        let moon = starryBackground.querySelector('.moon');
+        if (!moon) {
+            moon = document.createElement('img');
+            moon.src = 'assets/images/moon.png';
+            moon.alt = 'Moon';
+            moon.className = 'moon';
+            starryBackground.appendChild(moon);
+        }
+
+        // Create and append stars container if it doesn't exist
+        let starsContainer = starryBackground.querySelector('.stars-container');
+        if (!starsContainer) {
+            starsContainer = document.createElement('div');
+            starsContainer.className = 'stars-container';
+            starryBackground.appendChild(starsContainer);
+        }
+
+        // Create stars
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            const size = Math.random() * 2 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.animationDelay = Math.random() * 4 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Create and append clouds if they don't exist
+        let clouds = starryBackground.querySelector('.clouds');
+        if (!clouds) {
+            clouds = document.createElement('div');
+            clouds.className = 'clouds';
+            starryBackground.appendChild(clouds);
+        }
+
+        // Show elements with proper timing
+        requestAnimationFrame(() => {
+            // Show background first
+            starryBackground.classList.add('show');
+            
+            // Show moon after a short delay
+            setTimeout(() => {
+                moon.classList.add('show');
+                
+                // Show stars gradually
+                const stars = starsContainer.querySelectorAll('.star');
+                stars.forEach((star, index) => {
+                    setTimeout(() => {
+                        star.classList.add('show');
+                    }, index * 20);
+                });
+
+                // Show clouds
+                setTimeout(() => {
+                    clouds.classList.add('show');
+                    
+                    // Create and show final message
+                    setTimeout(() => {
+                        const finalMessage = createFinalMessage();
+                        animateLines(finalMessage);
+
+                        // Make final message disappear after 10 seconds
+                        setTimeout(() => {
+                            finalMessage.classList.add('fade-out');
+                            
+                            // Create a single shooting star after final message fades
+                            setTimeout(() => {
+                                // Only create shooting star if it hasn't been created yet
+                                if (!shootingStarCreated) {
+                                    shootingStarCreated = true;
+                                    createShootingStar();
+                                }
+                            }, 2000); // Wait for fade-out animation to complete
+                        }, 10000); // 10 seconds reading time
+                    }, 1000);
+                }, 1500);
+            }, 500);
+        });
+    }
+
     function revealGifts() {
-      if (!isOpening) return;
-  
-      if (currentGiftIndex < shuffledGifts.length) {
-          setTimeout(() => {
-              if (!isOpening) return;
-  
-              if (currentGiftIndex > 0) {
-                  shuffledGifts[currentGiftIndex - 1].style.opacity = "0";
-                  shuffledGifts[currentGiftIndex - 1].style.display = "none";
-                  shuffledGifts[currentGiftIndex - 1].style.visibility = "hidden";
-              }
-  
-              const gift = shuffledGifts[currentGiftIndex];
-              positionGift(gift, currentGiftIndex);
-  
-              gift.style.opacity = "1";
-              gift.style.visibility = "visible";
-  
-              currentGiftIndex++;
-  
-              if (currentGiftIndex < shuffledGifts.length) {
-                  // Wait for the animation to complete before showing the next gift
-                  let delay = 2000; // Default delay (2s)
-                  if (gift.classList.contains("chocolate-bouquet")) delay = 2200;
-                  if (gift.classList.contains("teddy-bear")) delay = 2500;
-                  if (gift.classList.contains("mug")) delay = 2300;
-  
-                  setTimeout(revealGifts, delay);
-              } else {
-                  setTimeout(() => {
-                      giftMessage.textContent =
-                          "If I could teleport this to you with magic, I would😅!! But...for now here’s a virtual gift—just imagine it in 4D😂!";
-                  }, 500);
-              }
-          }, 500); // Small delay before the first gift appears
-      }
-  }
-  
+        if (!isOpening) return;
+
+        if (currentGiftIndex < shuffledGifts.length) {
+            setTimeout(() => {
+                // If box was closed during timeout, stop the animation
+                if (!isOpening) return;
+
+                if (currentGiftIndex > 0) {
+                    shuffledGifts[currentGiftIndex - 1].style.opacity = "0";
+                    shuffledGifts[currentGiftIndex - 1].style.display = "none";
+                    shuffledGifts[currentGiftIndex - 1].style.visibility = "hidden";
+                }
+
+                const gift = shuffledGifts[currentGiftIndex];
+                positionGift(gift);
+                
+                gift.style.opacity = "1";
+                gift.style.visibility = "visible";
+
+                currentGiftIndex++;
+
+                if (currentGiftIndex < shuffledGifts.length) {
+                    let delay = 2000;
+                    setTimeout(revealGifts, delay);
+                } else {
+                    // All gifts have been revealed
+                    setTimeout(() => {
+                        if (!isOpening) return; // Check again after timeout
+                        
+                        giftMessage.textContent = "No magic portal yet, so here's a virtual gift—unwrap it in your mind with full 4D effects and a sprinkle of joy! 😊🎁";
+                        animationComplete = true; // Mark animation as complete
+                        
+                        // Start ending sequence after 3 seconds
+                        setTimeout(() => {
+                            if (!isOpening || !animationComplete) return; // Verify we're still in animation mode
+                            
+                            const totalFadeOutDuration = fadeOutElements();
+                            
+                            // Create starry background - start fading in after box fades but before confetti fully fades
+                            setTimeout(() => {
+                                if (!isOpening || !animationComplete) return; // Final verification
+                                
+                                startNightSkyTransition();
+                            }, 5500); // Start after box fades (4s + 1.5s)
+                        }, 3000);
+                    }, 500);
+                }
+            }, 500);
+        }
+    }
 
     function toggleBox(event) {
         event.stopPropagation();
-
+        
         if (box.classList.contains("open")) {
             closeBox();
         } else {
-            box.classList.add("open");
-            giftMessage.textContent = openedMessage;
-            currentGiftIndex = 0;
-            isOpening = true;
-            shuffleGifts();
-            revealGifts();
+            openBox();
         }
+    }
+
+    function openBox() {
+        box.classList.add("open");
+        giftMessage.textContent = openedMessage;
+        isOpening = true;
+        shuffleGifts();
+        revealGifts();
     }
 
     function closeBox() {
-        isOpening = false;
         box.classList.remove("open");
         giftMessage.textContent = originalMessage;
+        isOpening = false;
+        animationComplete = false;
+        
+        // Remove fade-out classes
+        document.querySelectorAll('.fade-out').forEach(el => {
+            el.classList.remove('fade-out');
+        });
+        
+        // Clean up night sky elements
+        const starryBackground = document.querySelector('.starry-background');
+        const finalMessage = document.querySelector('.final-message');
+        
+        if (starryBackground) {
+            starryBackground.classList.remove('show');
+            // Remove all children elements' show classes
+            starryBackground.querySelectorAll('.moon, .star, .clouds').forEach(el => {
+                el.classList.remove('show');
+            });
+            // Remove the starry background after transition
+            setTimeout(() => {
+                if (starryBackground.parentNode) {
+                    starryBackground.parentNode.removeChild(starryBackground);
+                }
+            }, 2000);
+        }
+        
+        if (finalMessage) {
+            finalMessage.remove();
+        }
+        
         resetGifts();
-        currentGiftIndex = 0;
     }
 
     box.addEventListener("click", toggleBox);
-    document.addEventListener("click", function (event) {
-        if (!box.contains(event.target)) {
-            closeBox();
-        }
-    });
 
     window.addEventListener("resize", () => {
-        if (isOpening && currentGiftIndex > 0) {
+        if (isOpening && currentGiftIndex > 0 && currentGiftIndex <= shuffledGifts.length) {
             positionGift(shuffledGifts[currentGiftIndex - 1]);
         }
     });
