@@ -12,6 +12,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const originalMessage = "🎉 Tap the Gift to Open! 🎁";
     const openedMessage = "✨ Unwrapping your surprise... ✨";
 
+    // Initialize audio for first user interaction
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    let audioInitialized = false;
+
+    // Function to initialize audio on first user interaction
+    function initializeAudio() {
+        if (!audioInitialized) {
+            // Just load the audio but don't play yet
+            backgroundMusic.load();
+            // Set the initial position to 30 seconds
+            backgroundMusic.currentTime = 30;
+            audioInitialized = true;
+        }
+    }
+
+    // Add event listeners to initialize audio
+    document.addEventListener('click', initializeAudio, { once: true });
+    document.addEventListener('touchstart', initializeAudio, { once: true });
+    document.addEventListener('keydown', initializeAudio, { once: true });
+
     function shuffleGifts() {
         shuffledGifts = [...gifts].sort(() => Math.random() - 0.5);
     }
@@ -259,10 +279,43 @@ document.addEventListener("DOMContentLoaded", function () {
             starryBackground.appendChild(clouds);
         }
 
+        // Get the audio element and play it
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        
+        // Set the start time to 30 seconds
+        backgroundMusic.currentTime = 30;
+        
         // Show elements with proper timing
         requestAnimationFrame(() => {
             // Show background first
             starryBackground.classList.add('show');
+            
+            // Play the background music starting from 30 second mark
+            backgroundMusic.play().catch(error => {
+                console.log("Audio playback failed:", error);
+                // Create play button if autoplay fails
+                if (!document.querySelector('.play-music-btn')) {
+                    const playButton = document.createElement('button');
+                    playButton.className = 'play-music-btn';
+                    playButton.innerHTML = '🎵 Play Music';
+                    playButton.style.position = 'fixed';
+                    playButton.style.bottom = '20px';
+                    playButton.style.right = '20px';
+                    playButton.style.zIndex = '1000';
+                    playButton.style.padding = '10px';
+                    playButton.style.borderRadius = '30px';
+                    playButton.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    playButton.style.color = 'white';
+                    playButton.style.border = '2px solid white';
+                    playButton.style.cursor = 'pointer';
+                    playButton.onclick = function() {
+                        backgroundMusic.currentTime = 30; // Also set 30s mark when button is clicked
+                        backgroundMusic.play();
+                        this.remove();
+                    };
+                    document.body.appendChild(playButton);
+                }
+            });
             
             // Show moon after a short delay
             setTimeout(() => {
@@ -379,6 +432,19 @@ document.addEventListener("DOMContentLoaded", function () {
         giftMessage.textContent = originalMessage;
         isOpening = false;
         animationComplete = false;
+        
+        // Stop background music
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        if (backgroundMusic) {
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
+        }
+        
+        // Remove play button if it exists
+        const playButton = document.querySelector('.play-music-btn');
+        if (playButton) {
+            playButton.remove();
+        }
         
         // Remove fade-out classes
         document.querySelectorAll('.fade-out').forEach(el => {
