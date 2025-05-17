@@ -5,41 +5,53 @@ async function logVisitor(pageName) {
     localStorage.setItem('userID', userID);
   }
 
-  const userAgent = navigator.userAgent;
-  const os = navigator.platform;
-  const time = new Date().toLocaleString();
+  // Device and OS details
+  const device = navigator.userAgent || "Unknown";
+  const os = navigator.platform || "Unknown";
 
-  // Attempt to extract browser name
+  // Browser detection (manual)
   let browser = "Unknown";
-  if (userAgent.includes("Chrome")) browser = "Chrome";
-  else if (userAgent.includes("Firefox")) browser = "Firefox";
-  else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
-  else if (userAgent.includes("Edg")) browser = "Edge";
-
-  let location = "Unknown";
-  try {
-    const res = await fetch("https://ipapi.co/json");
-    const data = await res.json();
-    location = `${data.city}, ${data.region}, ${data.country_name}`;
-  } catch (error) {
-    console.log("Location fetch failed:", error);
+  if (navigator.userAgent.indexOf("Chrome") !== -1) {
+    browser = "Chrome";
+  } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+    browser = "Firefox";
+  } else if (navigator.userAgent.indexOf("Safari") !== -1) {
+    browser = "Safari";
+  } else if (navigator.userAgent.indexOf("MSIE") !== -1 || !!document.documentMode) {
+    browser = "Internet Explorer";
   }
 
+  // Time (local timestamp)
+  const time = new Date().toLocaleString();
+
+  // Location using ipapi
+  let location = "Unknown";
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    if (res.ok) {
+      const data = await res.json();
+      location = `${data.city}, ${data.region}, ${data.country_name}`;
+    }
+  } catch (err) {
+    console.log("Location fetch failed:", err);
+  }
+
+  // Submit to SheetDB
   fetch("https://sheetdb.io/api/v1/xynpa6kuoq8ag", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       data: [{
         Page: pageName,
         UserID: userID,
+        Device: device,
         OS: os,
         Browser: browser,
-        Device: userAgent,
         Time: time,
         Location: location
       }]
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
+    })
   });
 }
