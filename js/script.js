@@ -1,4 +1,34 @@
 async function logVisitor(pageName) {
+  // Detect mobile model for Android/iOS, or Unknown
+  function getMobileModel() {
+    const ua = navigator.userAgent;
+
+    // Android device model extraction
+    const match = ua.match(/Android.*; ([^;]+) Build\//);
+    if (match && match[1]) {
+      return match[1].trim(); // e.g., "OnePlus GM1913"
+    }
+
+    // iOS generic device detection
+    if (/iPhone/.test(ua)) return "iPhone";
+    if (/iPad/.test(ua)) return "iPad";
+
+    return "Unknown";
+  }
+
+  // Detect device type (Mobile, Tablet, Desktop/Laptop)
+  function getDeviceType() {
+    const ua = navigator.userAgent;
+
+    if (/Mobi|Android/i.test(ua)) {
+      return "Mobile";
+    }
+    if (/Tablet|iPad/i.test(ua)) {
+      return "Tablet";
+    }
+    return "Desktop/Laptop";
+  }
+
   let userID = localStorage.getItem('userID');
   if (!userID) {
     userID = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
@@ -17,14 +47,18 @@ async function logVisitor(pageName) {
   else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
 
   const time = new Date().toLocaleString();
-
   let location = "Unknown";
+
   try {
     const response = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
     const data = await response.json();
-    location = `${data.city}, ${data.region}, ${data.country_name}, ${data.postal} (Lat: ${data.loc.split(',')[0]}, Lon: ${data.loc.split(',')[1]}), ${data.org}`;  } catch (error) {
+    location = `${data.city}, ${data.region}, ${data.country_name}, ${data.postal}, (Lat: ${data.loc.split(',')[0]}, Lon: ${data.loc.split(',')[1]}), ${data.org},(ip:${data.ip})`;
+  } catch (error) {
     console.error("Location fetch failed:", error);
   }
+
+  const mobileModel = getMobileModel();
+  const deviceType = getDeviceType();
 
   const payload = {
     data: [{
@@ -33,6 +67,8 @@ async function logVisitor(pageName) {
       Device: device,
       OS: os,
       Browser: browser,
+      DeviceType: deviceType,
+      MobileModel: mobileModel,
       Time: time,
       Location: location
     }]
