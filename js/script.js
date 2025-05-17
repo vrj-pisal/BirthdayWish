@@ -20,28 +20,34 @@ async function logVisitor(pageName) {
 
   let location = "Unknown";
   try {
-    const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51"); // replace with your ipinfo token
-    const data = await res.json();
-    location = `${data.city}, ${data.region}, ${data.country}`;
-  } catch (err) {
-    console.log("Location fetch failed:", err);
+    const response = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
+    const data = await response.json();
+    location = `${data.city}, ${data.region}, ${data.country_name}`;
+  } catch (error) {
+    console.error("Location fetch failed:", error);
   }
+
+  const payload = {
+    data: [{
+      Page: pageName,
+      UserID: userID,
+      Device: device,
+      OS: os,
+      Browser: browser,
+      Time: time,
+      Location: location
+    }]
+  };
 
   fetch("https://sheetdb.io/api/v1/xynpa6kuoq8ag", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      data: [{
-        Page: pageName,
-        UserID: userID,
-        Device: device,
-        OS: os,
-        Browser: browser,
-        Time: time,
-        Location: location
-      }]
-    })
-  });
+    body: JSON.stringify(payload)
+  }).then(res => {
+    if (!res.ok) {
+      console.error("SheetDB error:", res.statusText);
+    }
+  }).catch(err => console.error("Request failed:", err));
 }
