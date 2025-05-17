@@ -25,7 +25,7 @@ async function logVisitor(pageName) {
   }
 
   // Send to SheetDB
-  fetch("https://sheetdb.io/api/v1/YOUR_API_ID", {
+  fetch("https://sheetdb.io/api/v1/xynpa6kuoq8ag", {
     method: "POST",
     body: JSON.stringify({
       data: [{
