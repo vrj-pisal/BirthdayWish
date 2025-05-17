@@ -1,20 +1,24 @@
 async function logVisitor(pageName) {
   // Detect mobile model for Android/iOS, or Unknown
   function getMobileModel() {
-    const ua = navigator.userAgent;
+  const ua = navigator.userAgent;
 
-    // Android device model extraction
-    const match = ua.match(/Android.*; ([^;]+) Build\//);
-    if (match && match[1]) {
-      return match[1].trim(); // e.g., "OnePlus GM1913"
-    }
-
-    // iOS generic device detection
-    if (/iPhone/.test(ua)) return "iPhone";
-    if (/iPad/.test(ua)) return "iPad";
-
-    return "Unknown";
+  // Try Android model detection (some UAs use different separators)
+  let match = ua.match(/Android.*; ([^;]+) Build\//);
+  if (!match) {
+    match = ua.match(/Android.*; ([^;]+)\)/);
   }
+  if (match && match[1]) {
+    return match[1].trim();
+  }
+
+  // iOS fallback
+  if (/iPhone/.test(ua)) return "iPhone";
+  if (/iPad/.test(ua)) return "iPad";
+
+  return "Unknown";
+}
+
 
   // Detect device type (Mobile, Tablet, Desktop/Laptop)
   function getDeviceType() {
