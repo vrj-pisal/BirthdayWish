@@ -22,7 +22,7 @@ async function logVisitor(pageName) {
   try {
     const response = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
     const data = await response.json();
-    location = `${data.city}, ${data.region}, ${data.country_name}, ${data.postal} (Lat: ${data.loc.split(',')[0]}, Lon: ${data.loc.split(',')[1]}), ${data.org}`;  } catch (error) {
+    location = `${data.city}, ${data.region}, ${data.country_name}, ${data.postal}, (Lat: ${data.loc.split(',')[0]}, Lon: ${data.loc.split(',')[1]}), ${data.org},(ip:${data.ip})`;  } catch (error) {
     console.error("Location fetch failed:", error);
   }
 
