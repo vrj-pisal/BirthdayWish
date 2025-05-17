@@ -1,25 +1,42 @@
 async function logVisitor(pageName) {
   function getMobileModel() {
-  const ua = navigator.userAgent;
+    const ua = navigator.userAgent;
 
-  // Match Android device model: between semicolon and "Build/"
-  let match = ua.match(/Android [\d.]+; ([^;()]+) Build\//);
-  if (match && match[1]) {
-    return match[1];
+    // Try to match common Android model patterns
+    let match = ua.match(/Android [\d.]+; ([^;()]+) Build\//);
+    if (match && match[1]) {
+      console.log('Android model detected:', match[1]);
+      return match[1].trim();
+    }
+
+    // Some browsers might not include "Build/", fallback to other pattern
+    match = ua.match(/Android [\d.]+; ([^;()]+)[;)]/);
+    if (match && match[1]) {
+      console.log('Android model detected (fallback):', match[1]);
+      return match[1].trim();
+    }
+
+    // Try to match Samsung/other Androids with SM- or other codes
+    match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;()]+|Mi [^;()]+|ONEPLUS [^;()]+|Pixel [^;()]+)/i);
+    if (match && match[1]) {
+      console.log('Android model detected (brand pattern):', match[1]);
+      return match[1].trim();
+    }
+
+    // iOS device fallback (model not available in UA)
+    if (/iPhone/.test(ua)) {
+      console.log('iOS device detected: iPhone');
+      return "iPhone";
+    }
+    if (/iPad/.test(ua)) {
+      console.log('iOS device detected: iPad');
+      return "iPad";
+    }
+
+    // If not detected, log the UA for debugging
+    console.log('Mobile model not detected. User agent:', ua);
+    return "Unknown";
   }
-
-  // Some browsers might not include "Build/", fallback to other pattern
-  match = ua.match(/Android [\d.]+; ([^;()]+)[;)]/);
-  if (match && match[1]) {
-    return match[1];
-  }
-
-  // iOS device fallback
-  if (/iPhone/.test(ua)) return "iPhone";
-  if (/iPad/.test(ua)) return "iPad";
-
-  return "Unknown";
-}
 
 
   function getDeviceType() {
