@@ -1,41 +1,41 @@
 async function logVisitor(pageName) {
-  // Generate or fetch unique user ID from localStorage
   let userID = localStorage.getItem('userID');
   if (!userID) {
-    userID = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    userID = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
     localStorage.setItem('userID', userID);
   }
 
-  // Device info
-  const device = navigator.userAgent;
+  const userAgent = navigator.userAgent;
   const os = navigator.platform;
-  const browser = navigator.appCodeName + " " + navigator.appVersion;
-
-  // Time
   const time = new Date().toLocaleString();
 
-  // Location (via IP)
+  // Attempt to extract browser name
+  let browser = "Unknown";
+  if (userAgent.includes("Chrome")) browser = "Chrome";
+  else if (userAgent.includes("Firefox")) browser = "Firefox";
+  else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
+  else if (userAgent.includes("Edg")) browser = "Edge";
+
   let location = "Unknown";
   try {
     const res = await fetch("https://ipapi.co/json");
     const data = await res.json();
     location = `${data.city}, ${data.region}, ${data.country_name}`;
-  } catch (e) {
-    console.log("Location fetch failed", e);
+  } catch (error) {
+    console.log("Location fetch failed:", error);
   }
 
-  // Send to SheetDB
   fetch("https://sheetdb.io/api/v1/xynpa6kuoq8ag", {
     method: "POST",
     body: JSON.stringify({
       data: [{
         Page: pageName,
-        Device: device,
+        UserID: userID,
         OS: os,
         Browser: browser,
+        Device: userAgent,
         Time: time,
-        Location: location,
-        UserID: userID
+        Location: location
       }]
     }),
     headers: {
