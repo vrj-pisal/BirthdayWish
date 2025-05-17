@@ -1,23 +1,26 @@
 async function logVisitor(pageName) {
   function getMobileModel() {
-    const ua = navigator.userAgent;
+  const ua = navigator.userAgent;
 
-    // Android: get everything between "Android ...; " and " Build/"
-    let match = ua.match(/Android.*; ([^;]+) Build\//);
-    if (!match) {
-      // fallback pattern (e.g., if Build/ is not included)
-      match = ua.match(/Android.*; ([^)]+)\)/);
-    }
-    if (match && match[1]) {
-      return match[1]; // no trim here
-    }
-
-    // iOS devices (only generic name available)
-    if (/iPhone/.test(ua)) return "iPhone";
-    if (/iPad/.test(ua)) return "iPad";
-
-    return "Unknown";
+  // Match Android device model: between semicolon and "Build/"
+  let match = ua.match(/Android [\d.]+; ([^;()]+) Build\//);
+  if (match && match[1]) {
+    return match[1];
   }
+
+  // Some browsers might not include "Build/", fallback to other pattern
+  match = ua.match(/Android [\d.]+; ([^;()]+)[;)]/);
+  if (match && match[1]) {
+    return match[1];
+  }
+
+  // iOS device fallback
+  if (/iPhone/.test(ua)) return "iPhone";
+  if (/iPad/.test(ua)) return "iPad";
+
+  return "Unknown";
+}
+
 
   function getDeviceType() {
     const ua = navigator.userAgent;
@@ -68,7 +71,8 @@ async function logVisitor(pageName) {
       DeviceType: deviceType,
       MobileModel: mobileModel,
       Time: time,
-      Location: location
+      Location: location,
+      UserAgent: ua, 
     }]
   };
 
