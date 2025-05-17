@@ -1,35 +1,29 @@
 async function logVisitor(pageName) {
-  // Detect mobile model for Android/iOS, or Unknown
   function getMobileModel() {
-  const ua = navigator.userAgent;
+    const ua = navigator.userAgent;
 
-  // Try Android model detection (some UAs use different separators)
-  let match = ua.match(/Android.*; ([^;]+) Build\//);
-  if (!match) {
-    match = ua.match(/Android.*; ([^;]+)\)/);
+    // Android: get everything between "Android ...; " and " Build/"
+    let match = ua.match(/Android.*; ([^;]+) Build\//);
+    if (!match) {
+      // fallback pattern (e.g., if Build/ is not included)
+      match = ua.match(/Android.*; ([^)]+)\)/);
+    }
+    if (match && match[1]) {
+      return match[1]; // no trim here
+    }
+
+    // iOS devices (only generic name available)
+    if (/iPhone/.test(ua)) return "iPhone";
+    if (/iPad/.test(ua)) return "iPad";
+
+    return "Unknown";
   }
-  if (match && match[1]) {
-    return match[1].trim();
-  }
 
-  // iOS fallback
-  if (/iPhone/.test(ua)) return "iPhone";
-  if (/iPad/.test(ua)) return "iPad";
-
-  return "Unknown";
-}
-
-
-  // Detect device type (Mobile, Tablet, Desktop/Laptop)
   function getDeviceType() {
     const ua = navigator.userAgent;
 
-    if (/Mobi|Android/i.test(ua)) {
-      return "Mobile";
-    }
-    if (/Tablet|iPad/i.test(ua)) {
-      return "Tablet";
-    }
+    if (/Mobi|Android/i.test(ua)) return "Mobile";
+    if (/Tablet|iPad/i.test(ua)) return "Tablet";
     return "Desktop/Laptop";
   }
 
