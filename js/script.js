@@ -1,56 +1,45 @@
-// track.js
-
-async function getUserInfo() {
-  const device = navigator.userAgent;
-  const time = new Date().toLocaleString();
-  let os = "Unknown";
-  let browser = "Unknown";
-
-  if (navigator.userAgentData) {
-    const uaData = navigator.userAgentData;
-    os = uaData.platform;
-    browser = uaData.brands.map(b => `${b.brand} ${b.version}`).join(", ");
-  } else {
-    const ua = navigator.userAgent;
-
-    if (ua.indexOf("Win") !== -1) os = "Windows";
-    else if (ua.indexOf("Mac") !== -1) os = "MacOS";
-    else if (ua.indexOf("Linux") !== -1) os = "Linux";
-    else if (/Android/.test(ua)) os = "Android";
-    else if (/iPhone|iPad/.test(ua)) os = "iOS";
-
-    if (ua.indexOf("Chrome") !== -1) browser = "Chrome";
-    else if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
-    else if (ua.indexOf("Safari") !== -1) browser = "Safari";
-    else browser = "Unknown";
+async function logVisitor(pageName) {
+  // Generate or fetch unique user ID from localStorage
+  let userID = localStorage.getItem('userID');
+  if (!userID) {
+    userID = 'user_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    localStorage.setItem('userID', userID);
   }
 
-  // Optional: Get user's location using IP-based geolocation API
+  // Device info
+  const device = navigator.userAgent;
+  const os = navigator.platform;
+  const browser = navigator.appCodeName + " " + navigator.appVersion;
+
+  // Time
+  const time = new Date().toLocaleString();
+
+  // Location (via IP)
   let location = "Unknown";
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipapi.co/json");
     const data = await res.json();
     location = `${data.city}, ${data.region}, ${data.country_name}`;
   } catch (e) {
-    console.warn("Location fetch failed:", e);
+    console.log("Location fetch failed", e);
   }
 
-  return { device, os, browser, time, location };
-}
-
-async function logToSheet() {
-  const info = await getUserInfo();
-
+  // Send to SheetDB
   fetch("https://sheetdb.io/api/v1/xynpa6kuoq8ag", {
     method: "POST",
+    body: JSON.stringify({
+      data: [{
+        Page: pageName,
+        Device: device,
+        OS: os,
+        Browser: browser,
+        Time: time,
+        Location: location,
+        UserID: userID
+      }]
+    }),
     headers: {
       "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ data: info })
-  })
-    .then(res => res.json())
-    .then(data => console.log("Logged to SheetDB:", data))
-    .catch(err => console.error("SheetDB logging error:", err));
+    }
+  });
 }
-
-logToSheet();
