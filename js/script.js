@@ -11,7 +11,7 @@ async function logVisitor(pageName) {
     const device = ua;
     const os = navigator.platform;
 
-    // Detect browser
+    // Browser detection
     let browser = "Unknown";
     if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
     else if (ua.includes("Firefox")) browser = "Firefox";
@@ -19,10 +19,10 @@ async function logVisitor(pageName) {
     else if (ua.includes("Edg")) browser = "Edge";
     else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
 
-    // Detect device type
+    // Device type
     const deviceType = /Mobi|Android/i.test(ua) ? "Mobile" : /Tablet|iPad/i.test(ua) ? "Tablet" : "Desktop/Laptop";
 
-    // Detect mobile model
+    // Mobile model detection
     let mobileModel = "Unknown";
     const match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;]+|Mi [^;]+|ONEPLUS [^;]+|Pixel [^;]+)/i);
     if (match) mobileModel = match[1];
@@ -31,7 +31,7 @@ async function logVisitor(pageName) {
     const now = new Date();
     const time = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()}, ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
 
-    // Location via IP info
+    // Location via IP
     let location = "Unknown";
     try {
       const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
@@ -39,10 +39,10 @@ async function logVisitor(pageName) {
       location = `${data.city || ""}, ${data.region || ""}, ${data.country || ""} | IP: ${data.ip || ""}`;
     } catch(e) {}
 
-    // Your Google Apps Script Web App URL
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzH3bK8vhj8S7Nd9vJclOZQui2r9wKLqm2kefU7FVRScAzk8suWX-yMeZqM_xgJKZYVQQ/exec"; // replace with your deployed URL
+    // Web App URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbznLF2knbn7NZF-g3qVWufM50645ly0SHhRmVGrW8rcH3YrWKcn4Lr01OXsK66HAWiT1Q/exec"; // Replace with your deployed Web App URL
 
-    // Send as GET request via Image() to avoid CORS
+    // Send as GET request using Image() to avoid CORS
     const params = new URLSearchParams({
       Page: pageName,
       Device: device,
