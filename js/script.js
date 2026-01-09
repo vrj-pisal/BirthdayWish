@@ -40,7 +40,7 @@ async function logVisitor(pageName) {
     } catch(e) {}
 
     // Web App URL
-    const scriptURL = "https://script.google.com/macros/s/AKfycbznLF2knbn7NZF-g3qVWufM50645ly0SHhRmVGrW8rcH3YrWKcn4Lr01OXsK66HAWiT1Q/exec"; // Replace with your deployed Web App URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxpdnl6xDAStLv10nSMPd0hlsqpPuYVpkVLvz-GEryt19gEFJYEnsFrCOQWFP8Q7nQK/exec"; // Replace with your deployed Web App URL
 
     // Send as GET request using Image() to avoid CORS
     const params = new URLSearchParams({
