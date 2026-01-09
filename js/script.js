@@ -26,7 +26,6 @@ async function logVisitor(pageName) {
     const now = new Date();
     const time = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()}, ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
 
-    // Use IPInfo for location
     let location = "Unknown";
     try {
       const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
@@ -34,8 +33,8 @@ async function logVisitor(pageName) {
       location = `${data.city || ""}, ${data.region || ""}, ${data.country || ""} | IP: ${data.ip || ""}`;
     } catch(e) {}
 
-    // Build URL with query params
-    const scriptURL = "https://script.google.com/macros/s/AKfycbySH5ntqxRLBq_nPpPeKp1DaVAO57hiG4yz-vaqpzCRfhTJsiYb2Rcl7jotkMc3hZiwBg/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyXo2i6G1nAXJ3RsDLjebq7-5o3G8uUNMAmWSuun3pPhbvXtYVV2h5ZpHp2KZf2brJ3KQ/exec";
+
     const params = new URLSearchParams({
       Page: pageName,
       UserID: userID,
@@ -49,7 +48,6 @@ async function logVisitor(pageName) {
       UserAgent: ua
     });
 
-    // Send via Image() to avoid CORS
     const img = new Image();
     img.src = scriptURL + "?" + params.toString();
 
