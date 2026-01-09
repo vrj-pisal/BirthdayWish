@@ -1,5 +1,6 @@
 async function logVisitor(pageName) {
   try {
+    // Generate or get unique user ID
     let userID = localStorage.getItem("userID");
     if (!userID) {
       userID = "user_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
@@ -10,6 +11,7 @@ async function logVisitor(pageName) {
     const device = ua;
     const os = navigator.platform;
 
+    // Detect browser
     let browser = "Unknown";
     if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
     else if (ua.includes("Firefox")) browser = "Firefox";
@@ -17,15 +19,19 @@ async function logVisitor(pageName) {
     else if (ua.includes("Edg")) browser = "Edge";
     else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
 
-    let deviceType = /Mobi|Android/i.test(ua) ? "Mobile" : /Tablet|iPad/i.test(ua) ? "Tablet" : "Desktop/Laptop";
+    // Detect device type
+    const deviceType = /Mobi|Android/i.test(ua) ? "Mobile" : /Tablet|iPad/i.test(ua) ? "Tablet" : "Desktop/Laptop";
 
+    // Detect mobile model
     let mobileModel = "Unknown";
-    let match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;]+|Mi [^;]+|ONEPLUS [^;]+|Pixel [^;]+)/i);
+    const match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;]+|Mi [^;]+|ONEPLUS [^;]+|Pixel [^;]+)/i);
     if (match) mobileModel = match[1];
 
+    // Time
     const now = new Date();
     const time = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()}, ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
 
+    // Location via IP info
     let location = "Unknown";
     try {
       const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
@@ -33,18 +39,20 @@ async function logVisitor(pageName) {
       location = `${data.city || ""}, ${data.region || ""}, ${data.country || ""} | IP: ${data.ip || ""}`;
     } catch(e) {}
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyXo2i6G1nAXJ3RsDLjebq7-5o3G8uUNMAmWSuun3pPhbvXtYVV2h5ZpHp2KZf2brJ3KQ/exec";
+    // Your Google Apps Script Web App URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzH3bK8vhj8S7Nd9vJclOZQui2r9wKLqm2kefU7FVRScAzk8suWX-yMeZqM_xgJKZYVQQ/exec"; // replace with your deployed URL
 
+    // Send as GET request via Image() to avoid CORS
     const params = new URLSearchParams({
       Page: pageName,
-      UserID: userID,
       Device: device,
       OS: os,
       Browser: browser,
-      DeviceType: deviceType,
-      MobileModel: mobileModel,
       Time: time,
       Location: location,
+      UserID: userID,
+      DeviceType: deviceType,
+      MobileModel: mobileModel,
       UserAgent: ua
     });
 
