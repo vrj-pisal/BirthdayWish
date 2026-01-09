@@ -1,67 +1,32 @@
-async function logVisitor(pageName) {
+function logVisitor(pageName) {
   try {
-    // Generate or get unique user ID
     let userID = localStorage.getItem("userID");
     if (!userID) {
-      userID = "user_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+      userID = "user_" + Date.now();
       localStorage.setItem("userID", userID);
     }
 
     const ua = navigator.userAgent;
-    const device = ua;
-    const os = navigator.platform;
 
-    // Browser detection
-    let browser = "Unknown";
-    if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
-    else if (ua.includes("Firefox")) browser = "Firefox";
-    else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
-    else if (ua.includes("Edg")) browser = "Edge";
-    else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
-
-    // Device type
-    const deviceType = /Mobi|Android/i.test(ua) ? "Mobile" : /Tablet|iPad/i.test(ua) ? "Tablet" : "Desktop/Laptop";
-
-    // Mobile model detection
-    let mobileModel = "Unknown";
-    const match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;]+|Mi [^;]+|ONEPLUS [^;]+|Pixel [^;]+)/i);
-    if (match) mobileModel = match[1];
-
-    // Time
-    const now = new Date();
-    const time = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()}, ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}:${String(now.getSeconds()).padStart(2,"0")}`;
-
-    // Location via IP
-    let location = "Unknown";
-    try {
-      const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
-      const data = await res.json();
-      location = `${data.city || ""}, ${data.region || ""}, ${data.country || ""} | IP: ${data.ip || ""}`;
-    } catch(e) {}
-
-    // Web App URL
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxpdnl6xDAStLv10nSMPd0hlsqpPuYVpkVLvz-GEryt19gEFJYEnsFrCOQWFP8Q7nQK/exec"; // Replace with your deployed Web App URL
-
-    // Send as GET request using Image() to avoid CORS
     const params = new URLSearchParams({
       Page: pageName,
-      Device: device,
-      OS: os,
-      Browser: browser,
-      Time: time,
-      Location: location,
+      Device: ua,
+      OS: navigator.platform,
+      Browser: ua.includes("Chrome") ? "Chrome" : "Other",
+      Time: new Date().toLocaleString(),
+      Location: "Unknown",
       UserID: userID,
-      DeviceType: deviceType,
-      MobileModel: mobileModel,
+      DeviceType: /Mobi/i.test(ua) ? "Mobile" : "Desktop",
+      MobileModel: "Unknown",
       UserAgent: ua
     });
 
     const img = new Image();
-    img.src = scriptURL + "?" + params.toString();
+    img.src = "https://script.google.com/macros/s/AKfycby3ygzRrrWUgPEH3S-FI2DWABrSr0IGOQZ7jbnUVjCPVSQPhwNNmTGsraAInwnRYwXbiQ/exec" + "?" + params.toString();
 
-    console.log("✅ Visitor data sent successfully");
+    console.log("✅ Visitor logged");
 
-  } catch(err) {
-    console.error("❌ logVisitor error:", err);
+  } catch (e) {
+    console.error("❌ Visitor log failed", e);
   }
 }
