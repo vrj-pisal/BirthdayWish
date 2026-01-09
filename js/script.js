@@ -1,13 +1,13 @@
 async function logVisitor(pageName) {
   try {
-    // ---------- USER ID ----------
-    let userID = localStorage.getItem('userID');
+    /* ---------- USER ID ---------- */
+    let userID = localStorage.getItem("userID");
     if (!userID) {
-      userID = 'user_' + crypto.randomUUID();
-      localStorage.setItem('userID', userID);
+      userID = "user_" + crypto.randomUUID();
+      localStorage.setItem("userID", userID);
     }
 
-    // ---------- DEVICE TYPE ----------
+    /* ---------- DEVICE TYPE ---------- */
     function getDeviceType() {
       const ua = navigator.userAgent;
       if (/Tablet|iPad/i.test(ua)) return "Tablet";
@@ -15,7 +15,7 @@ async function logVisitor(pageName) {
       return "Desktop/Laptop";
     }
 
-    // ---------- OS ----------
+    /* ---------- OS ---------- */
     function getOS() {
       const ua = navigator.userAgent;
       if (/Windows NT/i.test(ua)) return "Windows";
@@ -26,7 +26,7 @@ async function logVisitor(pageName) {
       return "Unknown";
     }
 
-    // ---------- BROWSER ----------
+    /* ---------- BROWSER ---------- */
     function getBrowser() {
       const ua = navigator.userAgent;
       if (ua.includes("Edg")) return "Edge";
@@ -37,7 +37,7 @@ async function logVisitor(pageName) {
       return "Unknown";
     }
 
-    // ---------- MOBILE MODEL ----------
+    /* ---------- MOBILE MODEL ---------- */
     function getMobileModel() {
       const ua = navigator.userAgent;
       let match =
@@ -50,10 +50,10 @@ async function logVisitor(pageName) {
       return "Unknown";
     }
 
-    // ---------- TIME ----------
+    /* ---------- TIME ---------- */
     const time = new Date().toLocaleString();
 
-    // ---------- LOCATION (SAFE API) ----------
+    /* ---------- LOCATION ---------- */
     let location = "Unknown";
     try {
       const res = await fetch("https://ipapi.co/json/");
@@ -61,7 +61,7 @@ async function logVisitor(pageName) {
       location = `${data.city || "N/A"}, ${data.region || "N/A"}, ${data.country_name || "N/A"}`;
     } catch (_) {}
 
-    // ---------- PAYLOAD ----------
+    /* ---------- PAYLOAD ---------- */
     const payload = {
       Page: pageName,
       UserID: userID,
@@ -74,7 +74,7 @@ async function logVisitor(pageName) {
       UserAgent: navigator.userAgent
     };
 
-    // ---------- SEND ----------
+    /* ---------- SEND ---------- */
     await fetch("https://script.google.com/macros/s/AKfycbxXlt-5DWwTCpQvR6njuNNQ0-PJYoh5z2OKq1vXxlkOoP78NCWXx-Dx3w13o9XfDdQcyw/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,6 +82,6 @@ async function logVisitor(pageName) {
     });
 
   } catch (err) {
-    console.error("Visitor log failed:", err);
+    console.error("❌ Visitor log failed:", err);
   }
 }
