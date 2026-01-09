@@ -67,7 +67,7 @@ function logVisitor(pageName) {
       };
 
       fetch(
-        "https://script.google.com/macros/s/AKfycbxXlt-5DWwTCpQvR6njuNNQ0-PJYoh5z2OKq1vXxlkOoP78NCWXx-Dx3w13o9XfDdQcyw/exec",
+        "https://script.google.com/macros/s/AKfycbw_7wPYbVOEJkxLa9b_jQOEXZBr3Tng2Jipij7Rr_LA8EWClWKKUxB-0aPXkwJynJQe5w/exec",
         {
           method: "POST",
           mode: "no-cors", // ✅ REQUIRED
