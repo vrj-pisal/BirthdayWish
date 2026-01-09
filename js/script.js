@@ -1,83 +1,90 @@
-function logVisitor(pageName) {
+async function logVisitor(pageName) {
   try {
+    console.log("🚀 logVisitor called:", pageName);
+
+    // ===== USER ID (persistent) =====
     let userID = localStorage.getItem("userID");
     if (!userID) {
       userID = "user_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
       localStorage.setItem("userID", userID);
     }
 
-    function getDeviceType() {
-      const ua = navigator.userAgent;
-      if (/Tablet|iPad/i.test(ua)) return "Tablet";
-      if (/Mobi|Android/i.test(ua)) return "Mobile";
-      return "Desktop";
-    }
+    // ===== BASIC INFO =====
+    const ua = navigator.userAgent;
+    const device = ua;
+    const os = navigator.platform;
 
-    function getOS() {
-      const ua = navigator.userAgent;
-      if (/Windows NT/i.test(ua)) return "Windows";
-      if (/Android/i.test(ua)) return "Android";
-      if (/iPhone|iPad/i.test(ua)) return "iOS";
-      if (/Mac OS X/i.test(ua)) return "MacOS";
-      if (/Linux/i.test(ua)) return "Linux";
-      return "Unknown";
-    }
+    let browser = "Unknown";
+    if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
+    else if (ua.includes("Firefox")) browser = "Firefox";
+    else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+    else if (ua.includes("Edg")) browser = "Edge";
+    else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
 
-    function getBrowser() {
-      const ua = navigator.userAgent;
-      if (ua.includes("Edg")) return "Edge";
-      if (ua.includes("OPR") || ua.includes("Opera")) return "Opera";
-      if (ua.includes("Chrome")) return "Chrome";
-      if (ua.includes("Firefox")) return "Firefox";
-      if (ua.includes("Safari")) return "Safari";
-      return "Unknown";
-    }
+    // ===== DEVICE TYPE =====
+    let deviceType = "Desktop/Laptop";
+    if (/Mobi|Android/i.test(ua)) deviceType = "Mobile";
+    if (/Tablet|iPad/i.test(ua)) deviceType = "Tablet";
 
+    // ===== MOBILE MODEL =====
     function getMobileModel() {
-      const ua = navigator.userAgent;
-      let match =
-        ua.match(/Android [\d.]+; ([^;()]+) Build\//) ||
-        ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;()]+|Pixel [^;()]+|ONEPLUS [^;()]+)/i);
+      let match = ua.match(/Android [\d.]+; ([^;()]+) Build\//);
+      if (match) return match[1].trim();
 
-      if (match && match[1]) return match[1].trim();
-      if (/iPhone/i.test(ua)) return "iPhone";
-      if (/iPad/i.test(ua)) return "iPad";
+      match = ua.match(/(SM-[A-Za-z0-9]+|Redmi [^;()]+|Mi [^;()]+|ONEPLUS [^;()]+|Pixel [^;()]+)/i);
+      if (match) return match[1].trim();
+
+      if (/iPhone/.test(ua)) return "iPhone";
+      if (/iPad/.test(ua)) return "iPad";
+
       return "Unknown";
     }
 
+    const mobileModel = getMobileModel();
+
+    // ===== TIME =====
+    const now = new Date();
+    const time =
+      String(now.getDate()).padStart(2, "0") + "/" +
+      String(now.getMonth() + 1).padStart(2, "0") + "/" +
+      now.getFullYear() + ", " +
+      String(now.getHours()).padStart(2, "0") + ":" +
+      String(now.getMinutes()).padStart(2, "0") + ":" +
+      String(now.getSeconds()).padStart(2, "0");
+
+    // ===== LOCATION (IPINFO) =====
     let location = "Unknown";
-    fetch("https://ipapi.co/json/")
-      .then(res => res.json())
-      .then(data => {
-        location = `${data.city || "N/A"}, ${data.region || "N/A"}, ${data.country_name || "N/A"}`;
-      })
-      .finally(() => sendData(location));
-
-    function sendData(locationText) {
-      const payload = {
-        Page: pageName,
-        UserID: userID,
-        DeviceType: getDeviceType(),
-        OS: getOS(),
-        Browser: getBrowser(),
-        MobileModel: getMobileModel(),
-        Time: new Date().toLocaleString(),
-        Location: locationText,
-        UserAgent: navigator.userAgent
-      };
-
-      fetch(
-        "https://script.google.com/macros/s/AKfycbw_7wPYbVOEJkxLa9b_jQOEXZBr3Tng2Jipij7Rr_LA8EWClWKKUxB-0aPXkwJynJQe5w/exec",
-        {
-          method: "POST",
-          mode: "no-cors", // ✅ REQUIRED
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }
-      );
+    try {
+      const res = await fetch("https://ipinfo.io/json?token=f8a6f678fbce51");
+      const data = await res.json();
+      location = `${data.city || ""}, ${data.region || ""}, ${data.country || ""} | IP: ${data.ip || ""}`;
+    } catch (e) {
+      location = "Location unavailable";
     }
+
+    // ===== SEND DATA (NO CORS, IMAGE BEACON) =====
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbxNJQH4KWPyeEJdeLPvCl4rYCjqNKCh3Z7oLC9n-Bh7txO1XIPc7AfHjzqhUD0gx45d7g/exec";
+
+    const params = new URLSearchParams({
+      Page: pageName,
+      UserID: userID,
+      Device: device,
+      OS: os,
+      Browser: browser,
+      DeviceType: deviceType,
+      MobileModel: mobileModel,
+      Time: time,
+      Location: location,
+      UserAgent: ua
+    });
+
+    const img = new Image();
+    img.src = scriptURL + "?" + params.toString();
+
+    console.log("✅ Visitor logged successfully");
 
   } catch (err) {
-    console.error("Visitor tracking failed:", err);
+    console.error("❌ logVisitor error:", err);
   }
 }
