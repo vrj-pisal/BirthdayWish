@@ -118,20 +118,16 @@ async function logVisitor(pageName) {
     console.log('📤 Sending data to Google Apps Script:', payload);
 
     // IMPORTANT: Replace 'YOUR_SCRIPT_URL_HERE' with your actual Google Apps Script Web App URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzQkAb6APRxsOsjBrdbsNzR8hkz5B9LE7URVEztgH2-DzpddctfJVCjoJ1v6NbLYOZlgA/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxA3CS7Cq7d5HkPSdUJcUjcusucrWtEzAkULBhMM64CqZmjCyF9Vl-2yMoH46uSkSDOoQ/exec';
     
-   const formData = new URLSearchParams(payload);
-
-fetch(scriptURL, {
-  method: "POST",
-  body: formData
-})
-.then(() => {
-  console.log("✅ Logged to Google Sheet");
-})
-.catch(err => {
-  console.error("❌ Logging failed", err);
-});
+    const scriptResponse = await fetch(scriptURL, {
+      method: "POST",
+      mode: "no-cors", // Important for Google Apps Script
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
 
     // Note: With no-cors mode, we can't read the response, but the data will be logged
     console.log("✅ Data sent to Google Apps Script successfully!");
