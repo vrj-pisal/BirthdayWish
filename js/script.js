@@ -118,7 +118,7 @@ async function logVisitor(pageName) {
     console.log('📤 Sending data to Google Apps Script:', payload);
 
     // IMPORTANT: Replace 'YOUR_SCRIPT_URL_HERE' with your actual Google Apps Script Web App URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxA3CS7Cq7d5HkPSdUJcUjcusucrWtEzAkULBhMM64CqZmjCyF9Vl-2yMoH46uSkSDOoQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwXMZ5mgEjONBreTS45todSXu2xunsmwpI2f3ZNUHt5Xg2-ahB6eOukiow4A3ym0OHujQ/exec';
     
     const scriptResponse = await fetch(scriptURL, {
       method: "POST",
